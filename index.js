@@ -14,7 +14,8 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     const data = JSON.parse(message);
-
+    console.log(data);
+    console.log("Data", data.action);
     if (data.action === "connectToCaster") {
       ntripClient.connectToCaster(ws);
     } else if (data.action === "closeConnection") {
