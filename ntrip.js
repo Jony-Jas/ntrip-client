@@ -2,7 +2,6 @@ const net = require("net");
 
 class NTRIPClient {
   constructor() {
-    this.x = 1;
     this.tcpCasterIp = "127.0.0.1";
     this.tcpCasterPort = 54321;
     this.clientSocket = null;
@@ -32,7 +31,6 @@ class NTRIPClient {
         })
       );
       console.log(`Received from caster: ${recData}`);
-      this.x++;
     });
 
     this.clientSocket.on("end", () => {
@@ -48,27 +46,33 @@ class NTRIPClient {
     this.clientSocket.write(JSON.stringify(RequestToSend));
   }
 
+  stopStream() {
+    this.clientSocket.write("STOP_STREAMING");
+  }
+
   closeConnection() {
-    this.clientSocket.destroy();
+    this.clientSocket.write("CLOSE_CONNECTION");
   }
 }
 
 module.exports = NTRIPClient;
 
-// // Create Object:
+// // // Create Object:
 // const ntripClient = new NTRIPClient();
 // ntripClient.connectToCaster(null);
 
-// //Sample Request Data
+// // //Sample Request Data
 // const dataToSend = {
-//   baseStation: "BS1",
-//   mountPoint: "BS1-MP1",
+//   username: "example@example.com",
+//   passsword: "example",
+//   mountPoint: "BS2",
+//   delay: 2
 // };
 
-// //Send Rquest
+// // //Send Rquest
 // ntripClient.sendRequestToCaster(dataToSend);
 
-// // Introduce a delay before closing the connection (in milliseconds)
+// // // Introduce a delay before closing the connection (in milliseconds)
 // const delayBeforeClosing = 5000; // Adjust as needed
 // setTimeout(() => {
 //   console.log("Initiating connection closure.");

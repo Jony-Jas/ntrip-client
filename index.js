@@ -7,26 +7,26 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const ntripClient = new NTRIPClient();
-
 wss.on("connection", (ws) => {
   console.log("Client connected to WebSocket");
+
+  const ntripClient = new NTRIPClient();
 
   ws.on("message", (message) => {
     const data = JSON.parse(message);
     console.log(data);
-    console.log("Data", data.action);
     if (data.action === "connectToCaster") {
       ntripClient.connectToCaster(ws);
     } else if (data.action === "closeConnection") {
       ntripClient.closeConnection();
     } else if (data.action === "sendRequest") {
-      const data = {
-        baseStation: "data.baseStation",
-        mountPoint: "data.mountPoint",
+      const sndData = {
+        ...data
       };
-      ntripClient.sendRequestToCaster(data);
-    }
+      ntripClient.sendRequestToCaster(sndData);
+    } else if (data.action === "stopStreaming") {
+      ntripClient.stopStream();
+    } 
   });
 
   ws.on("close", () => {
