@@ -21,15 +21,10 @@ class NTRIPClient {
 
     this.clientSocket.on("data", (recData) => {
       const parsedData = JSON.parse(recData);
-      ws.send(
-        JSON.stringify({
-          data: {
-            latitude: parsedData.latitude,
-            longitude: parsedData.longitude,
-            height: parsedData.height,
-          },
-        })
-      );
+      console.log(parsedData);
+      ws.send(JSON.stringify({
+        data: parsedData
+      }));
       console.log(`Received from caster: ${recData}`);
     });
 
