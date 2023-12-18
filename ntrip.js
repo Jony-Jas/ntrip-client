@@ -21,10 +21,16 @@ class NTRIPClient {
 
     this.clientSocket.on("data", (recData) => {
       const parsedData = JSON.parse(recData);
-      console.log(parsedData);
-      ws.send(JSON.stringify({
-        data: parsedData
-      }));
+      const currTime = new Date().toISOString();
+      console.log({ timestamp: new Date().toISOString, ...parsedData });
+      ws.send(
+        JSON.stringify({
+          data: {
+            timestamp: currTime,
+            ...parsedData,
+          },
+        })
+      );
       console.log(`Received from caster: ${recData}`);
     });
 
